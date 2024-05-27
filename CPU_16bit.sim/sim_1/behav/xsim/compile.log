@@ -1,0 +1,4 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Saurav_Raj_Paudel/Desktop/Projects/Digital_System_design/mini_project/CPU_16bit/CPU_16bit.srcs/sources_1/new/ram.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'ram'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Saurav_Raj_Paudel/Desktop/Projects/Digital_System_design/mini_project/CPU_16bit/CPU_16bit.srcs/sim_1/new/ram_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'ram_tb'
