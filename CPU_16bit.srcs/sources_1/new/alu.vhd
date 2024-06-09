@@ -11,7 +11,7 @@ entity alu is
         I_dataA: in std_logic_vector(15 downto 0);
         I_dataB: in std_logic_vector(15 downto 0);
         I_dataDwe: in std_logic;
-        I_aluop: in std_logic_vector(5 downto 0);
+        I_aluop: in std_logic_vector(4 downto 0);
         I_PC: in std_logic_vector(15 downto 0);
         I_dataIMM: in std_logic_vector(15 downto 0);
         O_dataResult: out std_logic_vector(15 downto 0);
@@ -37,10 +37,21 @@ begin
                    -- we are concatenating '0' with I_dataA and similarly for I_dataB, to capture the carry flag if the result of addition is beyond the storing capacity of 16 bit 
                else
                     s_result(16 downto 0) <= std_logic_vector(signed(I_dataA(15) & I_dataA) + signed(I_dataB(15) & I_dataB));
-               
+                    -- we are concatenating the LSB with the operand itself to preserve the last bit and capture the overflow flag....
                end if;
                s_shouldBranch <= '0';
                
+               
+               -- SUB OPCODE
+               when OPCODE_SUB =>
+                    if  I_aluop(0) = '0' then
+                   s_result(16 downto 0) <= std_logic_vector(unsigned('0' & I_dataA) - unsigned('0' & I_dataB));
+                   -- we are concatenating '0' with I_dataA and similarly for I_dataB, to capture the carry flag if the result of addition is beyond the storing capacity of 16 bit 
+               else
+                    s_result(16 downto 0) <= std_logic_vector(signed(I_dataA(15) & I_dataA) - signed(I_dataB(15) & I_dataB));
+               
+               end if;
+               s_shouldBranch <= '0';
                -- OR OPCODE
                when OPCODE_OR =>
                         s_result(15 downto 0) <= I_dataA or I_dataB;
@@ -194,12 +205,29 @@ begin
                                 s_result(15 downto 0) <= I_dataA;
                         end case; 
                         s_shouldBranch <= '0';  
-               when OPCODE_JMPEQ =>
+               when OPCODE_JUMPEQ =>
                     -- set the branch target regardless
                     s_result(15 downto 0) <= I_dataB(15 downto 0);
                     
-                    case (I_aluop(8) & I_aluop(1 downto 0))
-                        when                         
+                    case (I_aluop(0) & I_dataIMM(1 downto 0)) is
+                        when CJF_EQ =>
+                            s_shouldBranch <= I_dataA(CMP_BIT_EQ); -- checking reg{Ra] for equality bit
+                        when CJF_AZ =>
+                        s_shouldBranch <= I_dataA(CMP_BIT_Az);
+                        when CJF_BZ => 
+                            s_shouldBranch <= I_dataA(CMP_BIT_Bz);
+                        when CJF_ANZ => 
+                            s_shouldBranch <= not I_dataA(CMP_BIT_AZ);
+                        when CJF_BNZ =>
+                            s_shouldBranch <= not I_dataA(CMP_BIT_BZ);
+                        when CJF_AGB => 
+                            s_shouldBranch <= I_dataA(CMP_BIT_AGB);
+                        when CJF_ALB =>
+                            s_shouldBranch <= I_dataA(CMP_BIT_ALB);
+                        when others =>
+                        s_shouldBranch <= '0';
+                   end case;
+                                                    
                when others =>
                     s_result <= "00" & X"FEFE";
                end case;

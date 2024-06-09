@@ -1,0 +1,10 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../CPU_16bit.srcs/sources_1/new/tpu_constants.vhd" \
+"../../../../CPU_16bit.srcs/sources_1/new/alu.vhd" \
+"../../../../CPU_16bit.srcs/sources_1/new/decoder.vhd" \
+"../../../../CPU_16bit.srcs/sources_1/new/reg16_8.vhd" \
+"../../../../CPU_16bit.srcs/sim_1/new/top_tb.vhd" \
+
+# Do not sort compile order
+nosort

@@ -41,4 +41,4 @@ EAStep()
      fi
 }
 
-EAStep vivado -log ram.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source ram.tcl
+EAStep vivado -log alu.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source alu.tcl
